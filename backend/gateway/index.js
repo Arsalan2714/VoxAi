@@ -23,7 +23,7 @@ app.use(cors({
 app.use(cookieParser())
 
 app.use("/api/auth", proxy(authService))
-app.use("/api/chat", proxyWithHeader(chatService))
+app.use("/api/chat",protect, proxyWithHeader(chatService))
 app.get("/api/me", protect, getCurrentUser)
 
 app.listen(port, () => {
