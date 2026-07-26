@@ -5,8 +5,6 @@ import connectDb from "./config/db.js";
 import router from "./routes/agent.route.js";
 
 
-
-
 const port = process.env.PORT
 
 const app = express()
