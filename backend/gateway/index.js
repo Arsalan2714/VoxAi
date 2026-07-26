@@ -12,6 +12,7 @@ dotenv.config()
 const port = process.env.PORT
 const authService = process.env.AUTH_SERVICE
 const chatService = process.env.CHAT_SERVICE
+const agentService = process.env.AGENT_SERVICE
 
 const app = express()
 app.use(cors({
@@ -24,6 +25,7 @@ app.use(cookieParser())
 
 app.use("/api/auth", proxy(authService))
 app.use("/api/chat",protect, proxyWithHeader(chatService))
+app.use("/api/agent",protect, proxyWithHeader(agentService))
 app.get("/api/me", protect, getCurrentUser)
 
 app.listen(port, () => {
