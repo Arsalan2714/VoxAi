@@ -7,17 +7,15 @@ import getMessages from '../features/getMessages'
 import { setMessages } from '../redux/messageSlice'
 
 const ChatArea = () => {
-  const { selectedConversation } = useSelector((state) => state.conversation)
+  const { selectedConversation } = useSelector(state => state.conversation)
   const dispatch = useDispatch()
   useEffect(() => {
     const getMesg = async () => {
       if (selectedConversation) {
        const data = await getMessages(selectedConversation?._id)
        dispatch(setMessages(data))
-      }
-      
+      } 
     }
-
     getMesg()
   },[selectedConversation])
   return (

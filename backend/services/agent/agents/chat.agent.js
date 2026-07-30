@@ -1,7 +1,12 @@
+import { AIMessage, HumanMessage, SystemMessage } from "@langchain/core/messages"
 import { getModel } from "../config/llmModels.js"
+import { getMemory } from "../config/memory.js"
 
 export const chatAgent = async (state) => {
     const llm = await getModel("chat")
+    
+    const history = await getMemory(state.conversationId)
+
     const SystemPrompt = `
     
     You are VoxAI an intelligent AI assistant.
@@ -24,19 +29,30 @@ export const chatAgent = async (state) => {
     
  `
 
-    const response = await llm.invoke([
-        {
-            role: "system",
-            content: SystemPrompt
-        },
-        {
-            role: "human",
-            content: state.prompt
+    const messages=[
+        new SystemMessage(SystemPrompt)
+
+    ]
+
+    history.forEach(msg => {
+        if(msg.role=='user'){
+            messages.push(new HumanMessage(msg.content))
         }
-    ])
+        if(msg.role=='assistant'){
+             messages.push(new AIMessage(msg.content))
+        }
+    });
+
+    messages.push(new HumanMessage(state.prompt))
+
+    console.log(messages)
+
+    const result = await llm.generate([messages])
+    const generatedMessage = result.generations?.[0]?.[0]?.message
+    const aiResponse = generatedMessage?.content ?? ""
 
     return {
         ...state,
-        aiResponse: response.content
+        aiResponse
     }
 }

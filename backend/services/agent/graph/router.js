@@ -1,3 +1,4 @@
+import { HumanMessage } from "@langchain/core/messages"
 import { getModel } from "../config/llmModels.js"
 
 export const router = async (state) => {
@@ -62,11 +63,12 @@ export const router = async (state) => {
     
     `
 
-    const response = await llm.invoke(prompt)
-    console.log(response)
+    const response = await llm.generate([[new HumanMessage(prompt)]])
+    const selectedAgent = response.generations?.[0]?.[0]?.message?.content ?? "chat"
+    console.log(selectedAgent)
     return{
         ...state,
-        agent:response.content
+        agent:selectedAgent
             .trim()
             .toLowerCase()
     }

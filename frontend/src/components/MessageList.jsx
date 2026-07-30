@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 import MessageBubble from './MessageBubble'
 
 function MessageList() {
-  const { selectedConversation } = useSelector((state) => state.conversation)
-    const { messages } = useSelector((state) => state.message)
+  const { selectedConversation } = useSelector(state => state.conversation)
+    const { messages } = useSelector(state => state.message)
 
   return (
 
